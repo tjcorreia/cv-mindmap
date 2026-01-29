@@ -1,6 +1,7 @@
 # Interactive CV Mindmap
 
-An interactive, visual representation of my professional profile as a mindmap. Built with some vibe coding on HTML, CSS, and JavaScript.
+An interactive, visual representation of my professional profile as a mindmap. 
+Built with some vibe coding on HTML, CSS, and JavaScript.
 
 ### View Online Mindmap
 Simply visit: [https://tjcorreia.github.io/cv-mindmap/](https://tjcorreia.github.io/cv-mindmap/)
