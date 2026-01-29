@@ -1,6 +1,6 @@
 # Interactive CV Mindmap
 
-An interactive, visual representation of my professional profile as a mindmap. Built with HTML, CSS, and JavaScript - no frameworks needed.
+An interactive, visual representation of my professional profile as a mindmap. Built with some vibe coding on HTML, CSS, and JavaScript.
 
 ## 🚀 [View Live Demo](https://teu-username.github.io/cv-mindmap/)
 
