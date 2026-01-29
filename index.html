@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiago Correia - Interactive CV Mindmap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0e27;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-1: #fbbf24;
+            --accent-2: #60a5fa;
+            --accent-3: #34d399;
+            --accent-4: #f472b6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow: hidden; /* Prevents scrollbars */
+            min-height: 100vh;
+            max-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(96, 165, 250, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(52, 211, 153, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Central circle with name */
+        .central-node {
+            position: absolute;
+            top: 53%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: clamp(180px, 25vmin, 280px);
+            height: clamp(180px, 25vmin, 280px);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(96, 165, 250, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 80px rgba(96, 165, 250, 0.3);
+            z-index: 10;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .central-node h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(32px, 4vmin, 48px);
+            letter-spacing: clamp(3px, 0.5vmin, 6px);
+            background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .central-node p {
+            font-size: clamp(9px, 1.2vmin, 12px);
+            color: var(--text-secondary);
+            letter-spacing: clamp(1.5px, 0.3vmin, 3px);
+            text-transform: uppercase;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                border-color: rgba(96, 165, 250, 0.4);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.02);
+                border-color: rgba(96, 165, 250, 0.6);
+            }
+        }
+
+        /* Category nodes */
+        .category-node {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .category-node:hover {
+            transform: translate(-50%, -50%) scale(1.25) !important;
+            border-color: var(--accent-2);
+            box-shadow: 0 20px 60px rgba(96, 165, 250, 0.4);
+            z-index: 100 !important;
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .category-title {
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 2px;
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.1;
+            transition: all 0.3s ease;
+        }
+
+        .category-node:hover .category-title {
+            margin-bottom: 16px;
+        }
+
+        .category-subtitle {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            margin-top: -6px;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .category-node:hover .category-subtitle {
+            opacity: 0.9;
+        }
+
+        .skill-link {
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            color: #60a5fa !important; /* Blue color for links */
+        }
+
+        .skill-link:hover {
+            text-decoration: underline;
+            transform: scale(1.1) !important;
+            color: #3b82f6 !important; /* Darker blue on hover */
+        }
+
+        .skills-list {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            align-content: center;
+            gap: 18px 12px;
+            padding: 10px;
+            transition: all 0.6s ease;
+        }
+
+        .category-node:hover .skills-list {
+            gap: 20px 14px;
+        }
+
+        .skill-tag {
+            white-space: nowrap;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            line-height: 1.3;
+            padding: 2px 0;
+        }
+
+        /* Create scattered/dispersed effect like stars in the sky */
+        .skill-tag:nth-child(1) { transform: translateY(-6px); }
+        .skill-tag:nth-child(2) { transform: translateY(8px); }
+        .skill-tag:nth-child(3) { transform: translateY(-3px); }
+        .skill-tag:nth-child(4) { transform: translateY(6px); }
+        .skill-tag:nth-child(5) { transform: translateY(-8px); }
+        .skill-tag:nth-child(6) { transform: translateY(4px); }
+        .skill-tag:nth-child(7) { transform: translateY(-7px); }
+        .skill-tag:nth-child(8) { transform: translateY(3px); }
+        .skill-tag:nth-child(9) { transform: translateY(-4px); }
+        .skill-tag:nth-child(10) { transform: translateY(7px); }
+        .skill-tag:nth-child(11) { transform: translateY(-2px); }
+
+        .category-node:hover .skill-tag:nth-child(1) { transform: translateY(-8px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(2) { transform: translateY(10px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(3) { transform: translateY(-5px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(4) { transform: translateY(8px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(5) { transform: translateY(-10px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(6) { transform: translateY(6px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(7) { transform: translateY(-9px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(8) { transform: translateY(5px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(9) { transform: translateY(-6px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(10) { transform: translateY(9px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(11) { transform: translateY(-4px) scale(1.05); }
+
+        /* Skill weight - size and color variations */
+        .skill-weight-4 {
+            font-size: clamp(11px, 1.3vmin, 13px);
+            font-weight: 700;
+            color: var(--accent-1);
+        }
+
+        .category-node:hover .skill-weight-4 {
+            font-size: clamp(13px, 1.5vmin, 15px);
+        }
+
+        .skill-weight-3 {
+            font-size: clamp(9px, 1.1vmin, 11px);
+            font-weight: 600;
+            color: var(--accent-2);
+        }
+
+        .category-node:hover .skill-weight-3 {
+            font-size: clamp(11px, 1.3vmin, 13px);
+        }
+
+        .skill-weight-2 {
+            font-size: clamp(8px, 1vmin, 10px);
+            font-weight: 500;
+            color: var(--accent-3);
+        }
+
+        .category-node:hover .skill-weight-2 {
+            font-size: clamp(9px, 1.1vmin, 11px);
+        }
+
+        .skill-weight-1 {
+            font-size: clamp(7px, 0.9vmin, 9px);
+            font-weight: 400;
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        .category-node:hover .skill-weight-1 {
+            font-size: clamp(8px, 1vmin, 10px);
+            opacity: 1;
+        }
+
+        /* Weight-based sizes for categories - RESPONSIVE */
+        .category-node {
+            --scale-factor: 1; /* Default, overridden by JS */
+        }
+
+        /* Weight 5 - MAIOR */
+        .weight-5 {
+            width: calc(280px * var(--scale-factor));
+            height: calc(280px * var(--scale-factor));
+        }
+        .weight-5 .category-title {
+            font-size: clamp(28px, calc(42px * var(--scale-factor)), 42px);
+        }
+
+        /* Weight 4 */
+        .weight-4 {
+            width: calc(250px * var(--scale-factor));
+            height: calc(250px * var(--scale-factor));
+        }
+        .weight-4 .category-title {
+            font-size: clamp(24px, calc(36px * var(--scale-factor)), 36px);
+        }
+
+        /* Weight 3 */
+        .weight-3 {
+            width: calc(220px * var(--scale-factor));
+            height: calc(220px * var(--scale-factor));
+        }
+        .weight-3 .category-title {
+            font-size: clamp(20px, calc(28px * var(--scale-factor)), 28px);
+        }
+
+        /* Weight 2 */
+        .weight-2 {
+            width: calc(195px * var(--scale-factor));
+            height: calc(195px * var(--scale-factor));
+        }
+        .weight-2 .category-title {
+            font-size: clamp(16px, calc(22px * var(--scale-factor)), 22px);
+        }
+
+        /* Weight 1 - MENOR */
+        .weight-1 {
+            width: calc(175px * var(--scale-factor));
+            height: calc(175px * var(--scale-factor));
+        }
+        .weight-1 .category-title {
+            font-size: clamp(14px, calc(18px * var(--scale-factor)), 18px);
+        }
+
+        /* Custom size adjustments for specific categories */
+        .category-methodologies {
+            width: calc(200px * var(--scale-factor)) !important;
+            height: calc(200px * var(--scale-factor)) !important;
+        }
+
+        .category-education {
+            width: calc(165px * var(--scale-factor)) !important;
+            height: calc(165px * var(--scale-factor)) !important;
+        }
+
+        .category-languages {
+            width: calc(150px * var(--scale-factor)) !important;
+            height: calc(150px * var(--scale-factor)) !important;
+        }
+
+        .category-soft-skills {
+            width: calc(250px * var(--scale-factor)) !important;
+            height: calc(250px * var(--scale-factor)) !important;
+        }
+
+        .category-development-tools {
+            width: calc(260px * var(--scale-factor)) !important;
+            height: calc(260px * var(--scale-factor)) !important;
+        }
+
+        .category-technologies {
+            width: calc(210px * var(--scale-factor)) !important;
+            height: calc(210px * var(--scale-factor)) !important;
+        }
+
+        .category-ai {
+            width: calc(205px * var(--scale-factor)) !important;
+            height: calc(205px * var(--scale-factor)) !important;
+        }
+
+        .category-projects {
+            width: calc(220px * var(--scale-factor)) !important;
+            height: calc(220px * var(--scale-factor)) !important;
+        }
+
+        /* Reduce gap between skills for specific categories */
+        .category-languages .skills-list {
+            gap: 10px 8px;
+        }
+
+        .category-languages:hover .skills-list {
+            gap: 12px 10px;
+        }
+
+        .category-education .skills-list {
+            gap: 10px 8px;
+        }
+
+        .category-education:hover .skills-list {
+            gap: 12px 10px;
+        }
+
+        .category-soft-skills .skills-list {
+            gap: 12px 10px;
+        }
+
+        .category-soft-skills:hover .skills-list {
+            gap: 14px 12px;
+        }
+
+        .category-projects .skills-list {
+            gap: 10px 8px;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            justify-items: center;
+            align-items: center;
+        }
+
+        /* Remove scattered effect from projects - keep them aligned in grid */
+        .category-projects .skill-link {
+            transform: none !important;
+        }
+
+        .category-projects:hover .skill-link {
+            transform: scale(1.1) !important;
+        }
+
+        .category-projects:hover .skills-list {
+            gap: 12px 10px;
+        }
+
+        .category-projects .skill-link {
+            color: #fb923c !important; /* Orange color for project links */
+        }
+
+        .category-projects .skill-link:hover {
+            color: #f97316 !important; /* Darker orange on hover */
+        }
+
+        /* Approximate specific skill pairs */
+        /* Languages: English closer to Portuguese */
+        .category-languages .skill-tag:nth-child(1) { transform: translateY(-2px); }
+        .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
+        .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+        .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+        
+        /* Languages: Spanish closer to French */
+        .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
+        .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
+        .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
+        .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+
+        /* Soft Skills: Team Mgmt closer to Communication */
+        .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-2px); }
+        .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
+        .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+        .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+
+        /* Education: CSPO closer to Java Progr. */
+        .category-education .skill-tag:nth-child(1) { transform: translateY(-2px); }
+        .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
+        .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+        .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+
+        /* Education: Civil Eng closer to Bridge Design */
+        .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
+        .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
+        .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
+        .category-education:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+
+        /* Design & Discovery: Raise Drawio and Adobe XD */
+        .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-10px); }
+        .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
+        .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-10px); }
+        .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.05); }
+
+        /* Technologies: Raise Blockchain and Keycloak */
+        .category-technologies .skill-tag:nth-child(2) { transform: translateY(-10px); }
+        .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
+        .category-technologies .skill-tag:nth-child(4) { transform: translateY(-10px); }
+        .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.05); }
+
+        /* Connecting lines */
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(148, 163, 184, 0) 0%, 
+                rgba(148, 163, 184, 0.3) 50%, 
+                rgba(148, 163, 184, 0) 100%
+            );
+            transform-origin: left center;
+            pointer-events: none;
+            z-index: 1;
+            animation: pulse-line 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-line {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(-50%, -50%) translateY(0px);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(-10px);
+            }
+        }
+
+        .instructions {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 14px 28px;
+            border-radius: 50px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            font-size: 13px;
+            color: var(--text-secondary);
+            z-index: 1000;
+            animation: fadeIn 1s ease-out 1s backwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .skills-list {
+                gap: 16px 10px;
+                padding: 8px;
+            }
+
+            .category-node:hover .skills-list {
+                gap: 18px 12px;
+            }
+            
+            .central-node {
+                width: 240px;
+                height: 240px;
+                top: 53%;
+            }
+            .central-node h1 {
+                font-size: 40px;
+            }
+            
+            .weight-5 { width: 240px; height: 240px; }
+            .weight-5 .category-title { font-size: 36px; }
+            .weight-4 { width: 215px; height: 215px; }
+            .weight-4 .category-title { font-size: 30px; }
+            .weight-3 { width: 190px; height: 190px; }
+            .weight-3 .category-title { font-size: 24px; }
+            .weight-2 { width: 170px; height: 170px; }
+            .weight-2 .category-title { font-size: 20px; }
+            .weight-1 { width: 150px; height: 150px; }
+            .weight-1 .category-title { font-size: 16px; }
+            
+            /* Custom sizes at 1200px */
+            .category-methodologies {
+                width: 175px !important;
+                height: 175px !important;
+            }
+            
+            .category-education {
+                width: 145px !important;
+                height: 145px !important;
+            }
+            
+            .category-languages {
+                width: 130px !important;
+                height: 130px !important;
+            }
+            
+            .category-soft-skills {
+                width: 215px !important;
+                height: 215px !important;
+            }
+
+            .category-development-tools {
+                width: 225px !important;
+                height: 225px !important;
+            }
+
+            .category-technologies {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            .category-ai {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            .category-projects {
+                width: 190px !important;
+                height: 190px !important;
+            }
+
+            /* Reduce gap for specific categories */
+            .category-languages .skills-list {
+                gap: 8px 6px;
+            }
+
+            .category-languages:hover .skills-list {
+                gap: 10px 8px;
+            }
+
+            .category-education .skills-list {
+                gap: 8px 6px;
+            }
+
+            .category-education:hover .skills-list {
+                gap: 10px 8px;
+            }
+
+            .category-soft-skills .skills-list {
+                gap: 10px 8px;
+            }
+
+            .category-soft-skills:hover .skills-list {
+                gap: 12px 10px;
+            }
+
+            .category-projects .skills-list {
+                gap: 8px 6px;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                justify-items: center;
+                align-items: center;
+            }
+
+            /* Remove scattered effect from projects */
+            .category-projects .skill-link {
+                transform: none !important;
+            }
+
+            .category-projects:hover .skill-link {
+                transform: scale(1.1) !important;
+            }
+
+            .category-projects:hover .skills-list {
+                gap: 10px 8px;
+            }
+
+            /* Approximate specific skill pairs at 1200px */
+            .category-languages .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
+            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
+            .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
+            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+
+            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
+            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+
+            .category-education .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
+            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
+            .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
+            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+
+            /* Design & Discovery: Raise Drawio and Adobe XD */
+            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-10px); }
+            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
+            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-10px); }
+            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.05); }
+
+            /* Technologies: Raise Blockchain and Keycloak */
+            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-10px); }
+            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
+            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-10px); }
+            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            .skills-list {
+                gap: 10px 6px;
+                padding: 6px;
+            }
+
+            .category-node:hover .skills-list {
+                gap: 12px 8px;
+            }
+
+            .central-node {
+                width: 150px;
+                height: 150px;
+                top: 53%;
+            }
+            .central-node h1 {
+                font-size: 24px;
+                letter-spacing: 2px;
+            }
+            .central-node p {
+                font-size: 8px;
+            }
+
+            .weight-5 { width: 150px; height: 150px; padding: 16px; }
+            .weight-5 .category-title { font-size: 22px; }
+            .weight-4 { width: 135px; height: 135px; padding: 14px; }
+            .weight-4 .category-title { font-size: 18px; }
+            .weight-3 { width: 125px; height: 125px; padding: 12px; }
+            .weight-3 .category-title { font-size: 16px; }
+            .weight-2 { width: 110px; height: 110px; padding: 10px; }
+            .weight-2 .category-title { font-size: 14px; }
+            .weight-1 { width: 100px; height: 100px; padding: 8px; }
+            .weight-1 .category-title { font-size: 12px; }
+            
+            /* Custom sizes at 768px */
+            .category-methodologies {
+                width: 120px !important;
+                height: 120px !important;
+            }
+            
+            .category-education {
+                width: 100px !important;
+                height: 100px !important;
+            }
+            
+            .category-languages {
+                width: 90px !important;
+                height: 90px !important;
+            }
+            
+            .category-soft-skills {
+                width: 140px !important;
+                height: 140px !important;
+            }
+
+            .category-development-tools {
+                width: 145px !important;
+                height: 145px !important;
+            }
+
+            .category-technologies {
+                width: 120px !important;
+                height: 120px !important;
+            }
+
+            .category-ai {
+                width: 115px !important;
+                height: 115px !important;
+            }
+
+            .category-projects {
+                width: 125px !important;
+                height: 125px !important;
+            }
+
+            /* Reduce gap for specific categories */
+            .category-languages .skills-list {
+                gap: 8px 6px;
+            }
+
+            .category-languages:hover .skills-list {
+                gap: 10px 8px;
+            }
+
+            .category-education .skills-list {
+                gap: 8px 6px;
+            }
+
+            .category-education:hover .skills-list {
+                gap: 10px 8px;
+            }
+
+            .category-soft-skills .skills-list {
+                gap: 10px 8px;
+            }
+
+            .category-soft-skills:hover .skills-list {
+                gap: 12px 10px;
+            }
+
+            .category-projects .skills-list {
+                gap: 8px 6px;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                justify-items: center;
+                align-items: center;
+            }
+
+            /* Remove scattered effect from projects */
+            .category-projects .skill-link {
+                transform: none !important;
+            }
+
+            .category-projects:hover .skill-link {
+                transform: scale(1.1) !important;
+            }
+
+            .category-projects:hover .skills-list {
+                gap: 10px 8px;
+            }
+
+            /* Approximate specific skill pairs at 768px */
+            .category-languages .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
+            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
+            .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
+            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+
+            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
+            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+
+            .category-education .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
+            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
+            .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
+            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+
+            /* Design & Discovery: Raise Drawio and Adobe XD */
+            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-10px); }
+            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
+            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-10px); }
+            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.05); }
+
+            /* Technologies: Raise Blockchain and Keycloak */
+            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-10px); }
+            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
+            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-10px); }
+            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.05); }
+            
+            .skill-weight-4 {
+                font-size: 9px;
+            }
+            .category-node:hover .skill-weight-4 {
+                font-size: 10px;
+            }
+            .skill-weight-3 {
+                font-size: 8px;
+            }
+            .category-node:hover .skill-weight-3 {
+                font-size: 9px;
+            }
+            .skill-weight-2 {
+                font-size: 7px;
+            }
+            .category-node:hover .skill-weight-2 {
+                font-size: 8px;
+            }
+            .skill-weight-1 {
+                font-size: 6px;
+            }
+            .category-node:hover .skill-weight-1 {
+                font-size: 7px;
+            }
+
+            .category-subtitle {
+                font-size: 8px !important;
+            }
+
+            .instructions {
+                font-size: 11px;
+                padding: 10px 20px;
+            }
+        }
+
+        /* PDF Download Link */
+        /* Action Buttons Footer - Truly floating, no page stretch */
+        .action-buttons-footer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            max-width: 250px; /* Prevents overflow on small screens */
+        }
+
+        .action-buttons-footer > * {
+            pointer-events: auto;
+        }
+
+        .pdf-download,
+        .linkedin-link {
+            position: relative; /* Changed from fixed */
+            bottom: auto;
+            right: auto;
+        }
+
+        .pdf-download a,
+        .linkedin-link a {
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 0.8vw, 10px);
+            padding: clamp(10px, 1.2vh, 14px) clamp(16px, 2vw, 24px);
+            color: white;
+            text-decoration: none;
+            border-radius: clamp(20px, 3vmin, 30px);
+            font-weight: 600;
+            font-size: clamp(11px, 1.3vmin, 14px);
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            width: clamp(195px, 22vw, 250px); /* Increased width for single line text */
+            justify-content: center;
+            box-sizing: border-box;
+            white-space: nowrap; /* Prevents text wrapping */
+        }
+
+        .pdf-download a {
+            background: rgba(96, 165, 250, 0.9);
+            box-shadow: 0 4px 20px rgba(96, 165, 250, 0.4);
+        }
+
+        .pdf-download a:hover {
+            background: rgba(59, 130, 246, 1);
+            box-shadow: 0 6px 30px rgba(96, 165, 250, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .pdf-download svg {
+            width: clamp(18px, 2.2vmin, 24px);
+            height: clamp(18px, 2.2vmin, 24px);
+            flex-shrink: 0;
+        }
+
+        .linkedin-link a {
+            background: rgba(10, 102, 194, 0.9);
+            box-shadow: 0 4px 20px rgba(10, 102, 194, 0.4);
+        }
+
+        .linkedin-link a:hover {
+            background: rgba(0, 119, 181, 1);
+            box-shadow: 0 6px 30px rgba(10, 102, 194, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .linkedin-link svg {
+            width: clamp(18px, 2.2vmin, 24px);
+            height: clamp(18px, 2.2vmin, 24px);
+            flex-shrink: 0;
+        }
+
+        /* Responsive button sizing */
+        @media (max-width: 768px) {
+            .action-buttons-footer {
+                bottom: 8px;
+                right: 8px;
+                gap: 8px;
+                max-width: calc(100vw - 16px); /* Ensures buttons never overflow */
+            }
+
+            .pdf-download a,
+            .linkedin-link a {
+                width: min(200px, calc(100vw - 30px));
+                font-size: clamp(10px, 2.5vw, 12px);
+                padding: 10px 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .pdf-download a,
+            .linkedin-link a {
+                width: min(180px, calc(100vw - 25px));
+                font-size: 11px;
+                padding: 9px 14px;
+            }
+
+            .pdf-download svg,
+            .linkedin-link svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .pdf-download a,
+            .linkedin-link a {
+                width: min(165px, calc(100vw - 20px));
+                font-size: 10px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="central-node">
+            <h1>TIAGO<br>CORREIA</h1>
+            <p>Interactive<br>CV Mindmap</p>
+        </div>
+
+        <div id="mindmapNodes"></div>
+    </div>
+
+    <!-- Action Buttons Footer -->
+    <div class="action-buttons-footer">
+        <div class="linkedin-link">
+            <a href="http://www.linkedin.com/in/CORREIA-tiago" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                LinkedIn Profile
+            </a>
+        </div>
+
+        <div class="pdf-download">
+            <a href="CV-Tiago Correia.pdf" download>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download CV (PDF)
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const profileData = {
+            "categories": [
+                {
+                    "name": "Project Management",
+                    "weight": 5,
+                    "skills": [
+                        {"name": "Roadmapping", "weight": 4},
+                        {"name": "Jira", "weight": 4},
+                        {"name": "Backlog Mgmt", "weight": 3},
+                        {"name": "Confluence", "weight": 2},
+                        {"name": "Trello", "weight": 2},
+                        {"name": "Risk Mgmt", "weight": 2},
+                        {"name": "YouTrack", "weight": 1},
+                        {"name": "MS Project", "weight": 1},
+                        {"name": "Task Prior.", "weight": 1}
+                    ]
+                },
+                {
+                    "name": "Methods",
+                    "weight": 4,
+                    "skills": [
+                        {"name": "Scrum", "weight": 4},
+                        {"name": "Kanban", "weight": 3},
+                        {"name": "Hybrid", "weight": 2},
+                        {"name": "Waterfall", "weight": 1}
+                    ]
+                },
+                {
+                    "name": "Design & Discovery",
+                    "weight": 3,
+                    "skills": [
+                        {"name": "Product Discovery", "weight": 4},
+                        {"name": "Drawio", "weight": 3},
+                        {"name": "Figma", "weight": 3},
+                        {"name": "Canva", "weight": 1},
+                        {"name": "Adobe XD", "weight": 2}
+                    ]
+                },
+                {
+                    "name": "Dev Tools",
+                    "weight": 3,
+                    "skills": [
+                        {"name": "Cursor", "weight": 4},
+                        {"name": "Java", "weight": 4},
+                        {"name": "JS/TS", "weight": 3},
+                        {"name": "React", "weight": 3},
+                        {"name": "CSS", "weight": 2},
+                        {"name": "HTML", "weight": 2},
+                        {"name": "SQL", "weight": 2},
+                        {"name": "Git", "weight": 2},
+                        {"name": "Docker", "weight": 1},
+                        {"name": "Postman", "weight": 1},
+                        {"name": "IntelliJ", "weight": 1}
+                    ]
+                },
+                {
+                    "name": "Tech Stack",
+                    "weight": 3,
+                    "skills": [
+                        {"name": "Webapps", "weight": 4},
+                        {"name": "SaaS", "weight": 4},
+                        {"name": "AI & ML", "weight": 3},
+                        {"name": "Blockchain", "weight": 3},
+                        {"name": "IoT", "weight": 2},
+                        {"name": "OAuth", "weight": 1}
+                    ]
+                },
+                {
+                    "name": "Soft Skills",
+                    "weight": 3,
+                    "skills": [
+                        {"name": "Team Mgmt", "weight": 4},
+                        {"name": "Communication", "weight": 4},
+                        {"name": "Stakeholder Alignment", "weight": 3},
+                        {"name": "Adaptability", "weight": 3},
+                        {"name": "Leadership", "weight": 2},
+                        {"name": "Problem Solving", "weight": 2},
+                        {"name": "Collaboration", "weight": 1},
+                        {"name": "Conflict Res.", "weight": 1}
+                    ]
+                },
+                {
+                    "name": "Education",
+                    "weight": 2,
+                    "skills": [
+                        {"name": "CSPO", "weight": 4},
+                        {"name": "Java Progr.", "weight": 3},
+                        {"name": "Civil Eng", "weight": 2},
+                        {"name": "Bridge Design", "weight": 1}
+                    ]
+                },
+                {
+                    "name": "AI",
+                    "weight": 2,
+                    "skills": [
+                        {"name": "Vibe Coding", "weight": 4},
+                        {"name": "Claude", "weight": 3},
+                        {"name": "ChatGPT", "weight": 3},
+                        {"name": "Manus", "weight": 2},
+                        {"name": "Gemini", "weight": 2},
+                        {"name": "Perplexity", "weight": 2},
+                        {"name": "Deepseek", "weight": 1}
+                    ]
+                },
+                {
+                    "name": "Languages",
+                    "weight": 1,
+                    "skills": [
+                        {"name": "English", "weight": 4},
+                        {"name": "Portuguese", "weight": 3},
+                        {"name": "Spanish", "weight": 2},
+                        {"name": "French", "weight": 2}
+                    ]
+                },
+                {
+                    "name": "Projects",
+                    "weight": 2,
+                    "subtitle": "Examples",
+                    "skills": [
+                        {"name": "Bhout", "weight": 3, "link": "https://www.bhout.com/"},
+                        {"name": "Fluxe", "weight": 3, "link": "https://fluxesoftware.com/en"},
+                        {"name": "Leiria Market", "weight": 3, "link": "https://leiriamarket.pt/"},
+                        {"name": "Argo", "weight": 3, "link": "https://theargonautcompany.com/argo/"},
+                        {"name": "Boxcore", "weight": 3, "link": "https://www.boxcore.com/"},
+                        {"name": "FIAF", "weight": 3, "link": "https://www.fiafnet.org/"}
+                    ]
+                }
+            ]
+        };
+
+        // Semi-circle layout: wider spacing (30°) for more separation
+        const categoryPositions = [
+            { category: "Education", weight: 2, angle: 150 },                   // left
+            { category: "Dev Tools", weight: 3, angle: 180 },                   // left-upper
+            { category: "Design & Discovery", weight: 3, angle: 210 },          // upper-left
+            { category: "Tech Stack", weight: 3, angle: 240 },                  // upper-left-center
+            { category: "Project Management", weight: 5, angle: 270 },          // TOP CENTER
+            { category: "Methods", weight: 4, angle: 300 },                     // upper-right-center
+            { category: "AI", weight: 2, angle: 330 },                          // upper-right
+            { category: "Soft Skills", weight: 3, angle: 360 },                 // right-upper
+            { category: "Languages", weight: 1, angle: 390 }                    // right
+            // Projects is handled separately below the center
+        ];
+
+        const container = document.getElementById('mindmapNodes');
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight * 0.53; // Moved down to 53% to prevent cutting Project Management
+        
+        // Dynamic radius based on screen size - scales better for all viewports
+        const minDimension = Math.min(window.innerWidth, window.innerHeight);
+        let radiusMultiplier;
+        
+        if (minDimension < 600) {
+            radiusMultiplier = 0.32; // Smaller screens
+        } else if (minDimension < 900) {
+            radiusMultiplier = 0.36; // Medium screens
+        } else if (minDimension < 1200) {
+            radiusMultiplier = 0.38; // Laptop screens
+        } else {
+            radiusMultiplier = 0.40; // Large screens
+        }
+        
+        const baseRadius = minDimension * radiusMultiplier;
+        
+        // Dynamic scale factor for category sizes
+        const scaleFactor = Math.max(0.6, Math.min(1.2, minDimension / 1000));
+
+        profileData.categories.forEach((category, index) => {
+            // Find position for this category
+            const posData = categoryPositions.find(p => p.category === category.name);
+            
+            // Special handling for Projects - position below center
+            let customRadius = baseRadius;
+            let angle, x, y;
+            
+            if (category.name === "Projects") {
+                // Position Projects directly below the central name
+                x = centerX;
+                y = centerY + (baseRadius * 0.85); // Increased from 0.75 to 0.85 for more spacing
+            } else {
+                // Use same radius for all other categories (semi-circle above)
+                angle = posData.angle * (Math.PI / 180);
+                x = centerX + customRadius * Math.cos(angle);
+                y = centerY + customRadius * Math.sin(angle);
+            }
+            
+            // Create node
+            const node = document.createElement('div');
+            node.className = `category-node weight-${category.weight}`;
+            
+            // Add custom classes for specific categories
+            if (category.name === "Methods") {
+                node.classList.add('category-methodologies');
+            } else if (category.name === "Education") {
+                node.classList.add('category-education');
+            } else if (category.name === "Languages") {
+                node.classList.add('category-languages');
+            } else if (category.name === "Soft Skills") {
+                node.classList.add('category-soft-skills');
+            } else if (category.name === "Dev Tools") {
+                node.classList.add('category-development-tools');
+            } else if (category.name === "Tech Stack") {
+                node.classList.add('category-technologies');
+            } else if (category.name === "Design & Discovery") {
+                node.classList.add('category-design-discovery');
+            } else if (category.name === "AI") {
+                node.classList.add('category-ai');
+            } else if (category.name === "Projects") {
+                node.classList.add('category-projects');
+            }
+            
+            // Position was already calculated above (x, y variables)
+            node.style.left = `${x}px`;
+            node.style.top = `${y}px`;
+            node.style.transform = 'translate(-50%, -50%)';
+            node.style.animationDelay = `${index * 0.2}s`;
+            node.style.setProperty('--scale-factor', scaleFactor);
+            
+            // Set z-index based on distance from center (270°)
+            // Further from center = higher z-index = overlaps closer categories
+            if (category.name === "Projects") {
+                node.style.zIndex = '100'; // Projects always on top
+            } else if (posData) {
+                // Calculate distance from 270° (center top)
+                const distanceFrom270 = Math.abs(posData.angle - 270);
+                // Map distance to z-index (0° distance = z-index 1, max 120° distance = z-index 50)
+                const zIndex = Math.floor((distanceFrom270 / 120) * 49) + 1;
+                node.style.zIndex = zIndex;
+            }
+            
+            // Title
+            const title = document.createElement('div');
+            title.className = 'category-title';
+            title.textContent = category.name;
+            node.appendChild(title);
+            
+            // Subtitle (if exists)
+            if (category.subtitle) {
+                const subtitle = document.createElement('div');
+                subtitle.className = 'category-subtitle';
+                subtitle.textContent = category.subtitle;
+                node.appendChild(subtitle);
+            }
+            
+            // Skills
+            const skillsList = document.createElement('div');
+            skillsList.className = 'skills-list';
+            
+            category.skills.forEach(skill => {
+                if (skill.link) {
+                    // Create clickable link
+                    const link = document.createElement('a');
+                    link.href = skill.link;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.className = `skill-tag skill-weight-${skill.weight} skill-link`;
+                    link.textContent = skill.name;
+                    skillsList.appendChild(link);
+                } else {
+                    // Regular skill tag
+                    const tag = document.createElement('div');
+                    tag.className = `skill-tag skill-weight-${skill.weight}`;
+                    tag.textContent = skill.name;
+                    skillsList.appendChild(tag);
+                }
+            });
+            
+            node.appendChild(skillsList);
+            container.appendChild(node);
+            
+            // Create connection line to center
+            const line = document.createElement('div');
+            line.className = 'connection-line';
+            
+            if (category.name === "Projects") {
+                // Vertical line down to Projects
+                const lineLength = (baseRadius * 0.65) - 140; // Distance from center edge to Projects (dynamic)
+                line.style.width = `${lineLength}px`;
+                line.style.left = `${centerX}px`;
+                line.style.top = `${centerY}px`;
+                line.style.transform = `rotate(90deg)`; // Vertical line downward
+            } else {
+                // Normal lines for semi-circle categories
+                const lineLength = baseRadius - 140;
+                line.style.width = `${lineLength}px`;
+                line.style.left = `${centerX}px`;
+                line.style.top = `${centerY}px`;
+                line.style.transform = `rotate(${posData.angle}deg)`;
+            }
+            
+            line.style.animationDelay = `${index * 0.1}s`;
+            container.appendChild(line);
+        });
+
+        // Parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const nodes = document.querySelectorAll('.category-node');
+            const x = (e.clientX / window.innerWidth - 0.5) * 15;
+            const y = (e.clientY / window.innerHeight - 0.5) * 15;
+            
+            nodes.forEach((node, index) => {
+                if (!node.matches(':hover')) {
+                    const speed = (index % 3 + 1) * 0.3;
+                    // Always maintain translate(-50%, -50%) for centering
+                    node.style.transform = `translate(calc(-50% + ${x * speed}px), calc(-50% + ${y * speed}px))`;
+                }
+            });
+        });
+
+        // Reposition on window resize
+        window.addEventListener('resize', () => {
+            location.reload();
+        });
+    </script>
+</body>
+</html>
