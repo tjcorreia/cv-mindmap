@@ -68,8 +68,8 @@
             top: 53%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: clamp(180px, 25vmin, 280px);
-            height: clamp(180px, 25vmin, 280px);
+            width: clamp(153px, 21.25vmin, 238px); /* Reduced by 15% from original (180->153, 280->238) */
+            height: clamp(153px, 21.25vmin, 238px);
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
             border-radius: 50%;
@@ -119,6 +119,7 @@
         /* Category nodes */
         .category-node {
             position: absolute;
+            transform: translate(-50%, -50%);
             background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(20px);
             border-radius: 50%;
@@ -128,18 +129,22 @@
             justify-content: center;
             padding: 24px;
             cursor: pointer;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Smooth animation for movement */
             border: 2px solid rgba(148, 163, 184, 0.2);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             animation: float 8s ease-in-out infinite;
         }
 
-        .category-node:hover {
-            transform: translate(-50%, -50%) scale(1.25) !important;
+        .category-node:hover,
+        .category-node.is-centered {
+            transform: translate(-50%, -50%) scale(1.3) !important; 
+            /* Scale 1.3x - position change handled by JS */
             border-color: var(--accent-2);
-            box-shadow: 0 20px 60px rgba(96, 165, 250, 0.4);
-            z-index: 100 !important;
-            background: rgba(15, 23, 42, 0.95);
+            border-width: 4px;
+            box-shadow: 0 50px 120px rgba(96, 165, 250, 0.8),
+                        0 0 80px rgba(96, 165, 250, 0.6);
+            z-index: 1000 !important; /* Very high to be on top */
+            background: rgba(15, 23, 42, 0.98);
         }
 
         .category-title {
@@ -147,13 +152,14 @@
             letter-spacing: 2px;
             text-align: center;
             color: var(--text-primary);
-            margin-bottom: 12px;
+            margin-bottom: 8px; /* Reduced from 12px - brings title closer to skills */
             line-height: 1.1;
             transition: all 0.3s ease;
         }
 
         .category-node:hover .category-title {
-            margin-bottom: 16px;
+            margin-bottom: 10px; /* Reduced from 16px - keeps title closer when scaled */
+            transform: scale(1.05); /* Title grows 20% on hover */
         }
 
         .category-subtitle {
@@ -194,13 +200,13 @@
             justify-content: space-around;
             align-items: center;
             align-content: center;
-            gap: 18px 12px;
+            gap: 8px 6px; /* Normal state - keeps skills closer together */
             padding: 10px;
             transition: all 0.6s ease;
         }
 
         .category-node:hover .skills-list {
-            gap: 20px 14px;
+            gap: 5px 4px; /* Balanced spacing on hover - not too tight, not too loose */
         }
 
         .skill-tag {
@@ -212,31 +218,32 @@
         }
 
         /* Create scattered/dispersed effect like stars in the sky */
-        .skill-tag:nth-child(1) { transform: translateY(-6px); }
-        .skill-tag:nth-child(2) { transform: translateY(8px); }
-        .skill-tag:nth-child(3) { transform: translateY(-3px); }
-        .skill-tag:nth-child(4) { transform: translateY(6px); }
-        .skill-tag:nth-child(5) { transform: translateY(-8px); }
-        .skill-tag:nth-child(6) { transform: translateY(4px); }
-        .skill-tag:nth-child(7) { transform: translateY(-7px); }
-        .skill-tag:nth-child(8) { transform: translateY(3px); }
-        .skill-tag:nth-child(9) { transform: translateY(-4px); }
-        .skill-tag:nth-child(10) { transform: translateY(7px); }
-        .skill-tag:nth-child(11) { transform: translateY(-2px); }
+        .skill-tag:nth-child(1) { transform: translateY(-1px); }
+        .skill-tag:nth-child(2) { transform: translateY(2px); }
+        .skill-tag:nth-child(3) { transform: translateY(-1px); }
+        .skill-tag:nth-child(4) { transform: translateY(1px); }
+        .skill-tag:nth-child(5) { transform: translateY(-1px); }
+        .skill-tag:nth-child(6) { transform: translateY(2px); }
+        .skill-tag:nth-child(7) { transform: translateY(-1px); }
+        .skill-tag:nth-child(8) { transform: translateY(1px); }
+        .skill-tag:nth-child(9) { transform: translateY(-1px); }
+        .skill-tag:nth-child(10) { transform: translateY(1px); }
+        .skill-tag:nth-child(11) { transform: translateY(-1px); }
 
-        .category-node:hover .skill-tag:nth-child(1) { transform: translateY(-8px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(2) { transform: translateY(10px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(3) { transform: translateY(-5px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(4) { transform: translateY(8px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(5) { transform: translateY(-10px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(6) { transform: translateY(6px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(7) { transform: translateY(-9px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(8) { transform: translateY(5px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(9) { transform: translateY(-6px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(10) { transform: translateY(9px) scale(1.05); }
-        .category-node:hover .skill-tag:nth-child(11) { transform: translateY(-4px) scale(1.05); }
+        .category-node:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(2) { transform: translateY(2px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(3) { transform: translateY(-1px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(4) { transform: translateY(2px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(5) { transform: translateY(-4px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(6) { transform: translateY(1px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(7) { transform: translateY(-4px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(8) { transform: translateY(2px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(9) { transform: translateY(-1px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(10) { transform: translateY(4px) scale(1.1); }
+        .category-node:hover .skill-tag:nth-child(11) { transform: translateY(-1px) scale(1.1); }
 
         /* Skill weight - size and color variations */
+        /* DEFAULT COLORS (para categorias sem todos os weights) */
         .skill-weight-4 {
             font-size: clamp(11px, 1.3vmin, 13px);
             font-weight: 700;
@@ -260,7 +267,7 @@
         .skill-weight-2 {
             font-size: clamp(8px, 1vmin, 10px);
             font-weight: 500;
-            color: var(--accent-3);
+            color: #fbbf24; /* Amber/gold for better contrast - was var(--accent-3) green */
         }
 
         .category-node:hover .skill-weight-2 {
@@ -270,14 +277,71 @@
         .skill-weight-1 {
             font-size: clamp(7px, 0.9vmin, 9px);
             font-weight: 400;
-            color: var(--text-secondary);
-            opacity: 0.8;
+            color: #7dd3fc; /* Light cyan for better contrast - was var(--text-secondary) gray */
+            opacity: 0.9; /* Slightly more opaque */
         }
 
         .category-node:hover .skill-weight-1 {
             font-size: clamp(8px, 1vmin, 10px);
             opacity: 1;
         }
+
+        /* ===== CONJUNTO 1: LARANJAS/VERMELHOS (Project Management) ===== */
+        .category-project-management .skill-weight-4 { color: #ef4444 !important; } /* Red */
+        .category-project-management .skill-weight-3 { color: #f97316 !important; } /* Orange */
+        .category-project-management .skill-weight-2 { color: #fbbf24 !important; } /* Amber */
+        .category-project-management .skill-weight-1 { color: #fde047 !important; opacity: 1 !important; } /* Yellow */
+
+        /* ===== CONJUNTO 2: AZUIS (Methods) ===== */
+        .category-methods .skill-weight-4 { color: #3b82f6 !important; } /* Blue */
+        .category-methods .skill-weight-3 { color: #60a5fa !important; } /* Light Blue */
+        .category-methods .skill-weight-2 { color: #93c5fd !important; } /* Lighter Blue */
+        .category-methods .skill-weight-1 { color: #dbeafe !important; opacity: 1 !important; } /* Very Light Blue */
+
+        /* ===== CONJUNTO 3: VERDES (Design & Discovery) ===== */
+        .category-design-discovery .skill-weight-4 { color: #10b981 !important; } /* Emerald */
+        .category-design-discovery .skill-weight-3 { color: #34d399 !important; } /* Light Emerald */
+        .category-design-discovery .skill-weight-2 { color: #6ee7b7 !important; } /* Lighter Emerald */
+        .category-design-discovery .skill-weight-1 { color: #a7f3d0 !important; opacity: 1 !important; } /* Very Light Emerald */
+
+        /* ===== CONJUNTO 4: ROXOS (Dev Tools) ===== */
+        .category-development-tools .skill-weight-4 { color: #8b5cf6 !important; } /* Violet */
+        .category-development-tools .skill-weight-3 { color: #a78bfa !important; } /* Light Violet */
+        .category-development-tools .skill-weight-2 { color: #c4b5fd !important; } /* Lighter Violet */
+        .category-development-tools .skill-weight-1 { color: #e9d5ff !important; opacity: 1 !important; } /* Very Light Violet */
+
+        /* ===== CONJUNTO 5: ROSAS/MAGENTAS (Tech Stack) ===== */
+        .category-technologies .skill-weight-4 { color: #ec4899 !important; } /* Pink */
+        .category-technologies .skill-weight-3 { color: #f472b6 !important; } /* Light Pink */
+        .category-technologies .skill-weight-2 { color: #f9a8d4 !important; } /* Lighter Pink */
+        .category-technologies .skill-weight-1 { color: #fce7f3 !important; opacity: 1 !important; } /* Very Light Pink */
+
+        /* ===== CONJUNTO 6: CIANOS (Soft Skills) ===== */
+        .category-soft-skills .skill-weight-4 { color: #06b6d4 !important; } /* Cyan */
+        .category-soft-skills .skill-weight-3 { color: #22d3ee !important; } /* Light Cyan */
+        .category-soft-skills .skill-weight-2 { color: #67e8f9 !important; } /* Lighter Cyan */
+        .category-soft-skills .skill-weight-1 { color: #cffafe !important; opacity: 1 !important; } /* Very Light Cyan */
+
+        /* ===== CONJUNTO 7: AMARELOS/LARANJAS QUENTES (AI) ===== */
+        .category-ai .skill-weight-4 { color: #f59e0b !important; } /* Amber */
+        .category-ai .skill-weight-3 { color: #fbbf24 !important; } /* Light Amber */
+        .category-ai .skill-weight-2 { color: #fde68a !important; } /* Yellow */
+        .category-ai .skill-weight-1 { color: #fef3c7 !important; opacity: 1 !important; } /* Very Light Yellow */
+
+        /* ===== CONJUNTO 8: AZUL-ESVERDEADO (Education) ===== */
+        .category-education .skill-weight-4 { color: #14b8a6 !important; } /* Teal */
+        .category-education .skill-weight-3 { color: #2dd4bf !important; } /* Light Teal */
+        .category-education .skill-weight-2 { color: #5eead4 !important; } /* Lighter Teal */
+        .category-education .skill-weight-1 { color: #99f6e4 !important; opacity: 1 !important; } /* Very Light Teal */
+
+        /* ===== CONJUNTO 9: ÍNDIGO (Languages) ===== */
+        .category-languages .skill-weight-4 { color: #6366f1 !important; } /* Indigo */
+        .category-languages .skill-weight-3 { color: #818cf8 !important; } /* Light Indigo */
+        .category-languages .skill-weight-2 { color: #a5b4fc !important; } /* Lighter Indigo */
+        .category-languages .skill-weight-1 { color: #c7d2fe !important; opacity: 1 !important; } /* Very Light Indigo */
+
+        /* ===== PROJECTS: TODOS COM MESMA COR (Ciano) ===== */
+        .category-projects .skill-link { color: #7dd3fc !important; } /* All same cyan color */
 
         /* Weight-based sizes for categories - RESPONSIVE */
         .category-node {
@@ -330,7 +394,7 @@
         }
 
         /* Custom size adjustments for specific categories */
-        .category-methodologies {
+        .category-methods {
             width: calc(200px * var(--scale-factor)) !important;
             height: calc(200px * var(--scale-factor)) !important;
         }
@@ -341,8 +405,8 @@
         }
 
         .category-languages {
-            width: calc(150px * var(--scale-factor)) !important;
-            height: calc(150px * var(--scale-factor)) !important;
+            width: calc(170px * var(--scale-factor)) !important; /* Increased from 150px */
+            height: calc(170px * var(--scale-factor)) !important;
         }
 
         .category-soft-skills {
@@ -366,33 +430,18 @@
         }
 
         .category-projects {
-            width: calc(220px * var(--scale-factor)) !important;
-            height: calc(220px * var(--scale-factor)) !important;
+            width: calc(242px * var(--scale-factor)) !important; /* Increased by 10% from 220px */
+            height: calc(242px * var(--scale-factor)) !important;
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px 24px 20px 16px !important; /* Asymmetric padding: less left, more right */
         }
 
-        /* Reduce gap between skills for specific categories */
-        .category-languages .skills-list {
-            gap: 10px 8px;
-        }
-
-        .category-languages:hover .skills-list {
-            gap: 12px 10px;
-        }
-
-        .category-education .skills-list {
-            gap: 10px 8px;
-        }
-
-        .category-education:hover .skills-list {
-            gap: 12px 10px;
-        }
-
-        .category-soft-skills .skills-list {
-            gap: 12px 10px;
-        }
-
-        .category-soft-skills:hover .skills-list {
-            gap: 14px 12px;
+        .category-projects .category-title {
+            margin-bottom: 10px; /* Reduced from 14px - closer spacing */
         }
 
         .category-projects .skills-list {
@@ -401,71 +450,109 @@
             grid-template-columns: 1fr 1fr;
             justify-items: center;
             align-items: center;
+            width: 100%; /* Ensure grid takes full width for proper centering */
+            transform: translateX(4px); /* Shift slightly right for better visual centering */
+            }
+
+            /* Center Leiria Market (3rd item) and Argo (6th item) on their own rows */
+            .category-projects .skill-link:nth-child(3),
+            .category-projects .skill-link:nth-child(6) {
+                grid-column: span 2;
         }
 
-        /* Remove scattered effect from projects - keep them aligned in grid */
+        /* Center Leiria Market (3rd item) and Argo (6th item) on their own rows */
+        .category-projects .skill-link:nth-child(3),
+        .category-projects .skill-link:nth-child(6) {
+            grid-column: span 2; /* Take full width */
+        }
+        .category-languages .skills-list {
+            gap: 10px 8px;
+        }
+
+        .category-languages:hover .skills-list {
+            gap: 5px 4px;
+        }
+
+        .category-education .skills-list {
+            gap: 10px 8px;
+        }
+
+        .category-education:hover .skills-list {
+            gap: 5px 4px;
+        }
+
+        .category-soft-skills .skills-list {
+            gap: 8px 6px;
+        }
+
+        .category-soft-skills:hover .skills-list {
+            gap: 5px 4px;
+        }
+
+        /* Projects links styling */
         .category-projects .skill-link {
             transform: none !important;
+            font-size: 1.1em !important; /* 1.1x larger (10% increase) */
+            text-decoration: underline !important; /* Underlined to show they're clickable */
+            color: #7dd3fc !important; /* Cyan color for project links - was #fb923c orange */
         }
 
         .category-projects:hover .skill-link {
             transform: scale(1.1) !important;
+            color: #60a5fa !important; /* Slightly darker cyan on hover */
         }
 
         .category-projects:hover .skills-list {
-            gap: 12px 10px;
-        }
-
-        .category-projects .skill-link {
-            color: #fb923c !important; /* Orange color for project links */
+            gap: 5px 4px;
         }
 
         .category-projects .skill-link:hover {
-            color: #f97316 !important; /* Darker orange on hover */
+            color: #3b82f6 !important; /* Darker blue on individual link hover - was #f97316 orange */
+            text-decoration: underline !important; /* Keep underline on hover */
         }
 
         /* Approximate specific skill pairs */
         /* Languages: English closer to Portuguese */
-        .category-languages .skill-tag:nth-child(1) { transform: translateY(-2px); }
+        .category-languages .skill-tag:nth-child(1) { transform: translateY(-1px); }
         .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
-        .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-        .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+        .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+        .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
         
         /* Languages: Spanish closer to French */
         .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
         .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
-        .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
-        .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+        .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
+        .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
 
         /* Soft Skills: Team Mgmt closer to Communication */
-        .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-2px); }
+        .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-1px); }
         .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
-        .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-        .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+        .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+        .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
 
         /* Education: CSPO closer to Java Progr. */
-        .category-education .skill-tag:nth-child(1) { transform: translateY(-2px); }
+        .category-education .skill-tag:nth-child(1) { transform: translateY(-1px); }
         .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
-        .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-        .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+        .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+        .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
 
         /* Education: Civil Eng closer to Bridge Design */
         .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
         .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
-        .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
-        .category-education:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+        .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
+        .category-education:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
 
         /* Design & Discovery: Raise Drawio and Adobe XD */
-        .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-10px); }
-        .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
-        .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-10px); }
-        .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.05); }
+        .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-4px); }
+        .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
+        .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-4px); }
+        .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.1); }
 
         /* Technologies: Raise Blockchain and Keycloak */
-        .category-technologies .skill-tag:nth-child(2) { transform: translateY(-10px); }
-        .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
-        .category-technologies .skill-tag:nth-child(4) { transform: translateY(-10px); }
-        .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.05); }
+        .category-technologies .skill-tag:nth-child(2) { transform: translateY(-4px); }
+        .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
+        .category-technologies .skill-tag:nth-child(4) { transform: translateY(-4px); }
+        .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.1); }
 
         /* Connecting lines */
         .connection-line {
@@ -492,7 +579,7 @@
                 transform: translate(-50%, -50%) translateY(0px);
             }
             50% {
-                transform: translate(-50%, -50%) translateY(-10px);
+                transform: translate(-50%, -50%) translateY(-4px);
             }
         }
 
@@ -520,17 +607,17 @@
         /* Responsive */
         @media (max-width: 1200px) {
             .skills-list {
-                gap: 16px 10px;
+                gap: 10px 8px;
                 padding: 8px;
             }
 
             .category-node:hover .skills-list {
-                gap: 18px 12px;
+                gap: 5px 4px;
             }
             
             .central-node {
-                width: 240px;
-                height: 240px;
+                width: 204px; /* Reduced by 15% from 240px */
+                height: 204px;
                 top: 53%;
             }
             .central-node h1 {
@@ -549,7 +636,7 @@
             .weight-1 .category-title { font-size: 16px; }
             
             /* Custom sizes at 1200px */
-            .category-methodologies {
+            .category-methods {
                 width: 175px !important;
                 height: 175px !important;
             }
@@ -560,8 +647,8 @@
             }
             
             .category-languages {
-                width: 130px !important;
-                height: 130px !important;
+                width: 145px !important; /* Increased from 130px */
+                height: 145px !important;
             }
             
             .category-soft-skills {
@@ -585,8 +672,8 @@
             }
 
             .category-projects {
-                width: 190px !important;
-                height: 190px !important;
+                width: 209px !important; /* Increased by 10% from 190px */
+                height: 209px !important;
             }
 
             /* Reduce gap for specific categories */
@@ -595,7 +682,7 @@
             }
 
             .category-languages:hover .skills-list {
-                gap: 10px 8px;
+                gap: 5px 4px;
             }
 
             .category-education .skills-list {
@@ -603,7 +690,7 @@
             }
 
             .category-education:hover .skills-list {
-                gap: 10px 8px;
+                gap: 5px 4px;
             }
 
             .category-soft-skills .skills-list {
@@ -611,7 +698,7 @@
             }
 
             .category-soft-skills:hover .skills-list {
-                gap: 12px 10px;
+                gap: 5px 4px;
             }
 
             .category-projects .skills-list {
@@ -620,56 +707,65 @@
                 grid-template-columns: 1fr 1fr;
                 justify-items: center;
                 align-items: center;
+                transform: translateX(4px); /* Shift slightly right for better visual centering */
+            }
+
+            /* Center Leiria Market (3rd item) and Argo (6th item) on their own rows */
+            .category-projects .skill-link:nth-child(3),
+            .category-projects .skill-link:nth-child(6) {
+                grid-column: span 2;
             }
 
             /* Remove scattered effect from projects */
             .category-projects .skill-link {
+                font-size: 1.1em !important;
+                text-decoration: underline !important;
                 transform: none !important;
             }
 
             .category-projects:hover .skill-link {
-                transform: scale(1.1) !important;
+            transform: scale(1.1) !important;
             }
 
             .category-projects:hover .skills-list {
-                gap: 10px 8px;
+                gap: 5px 4px;
             }
 
             /* Approximate specific skill pairs at 1200px */
-            .category-languages .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-languages .skill-tag:nth-child(1) { transform: translateY(-1px); }
             .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
             .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
             .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
-            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
+            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
 
-            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-1px); }
             .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
 
-            .category-education .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-education .skill-tag:nth-child(1) { transform: translateY(-1px); }
             .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
             .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
             .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
-            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
+            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
 
             /* Design & Discovery: Raise Drawio and Adobe XD */
-            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-10px); }
-            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
-            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-10px); }
-            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.05); }
+            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-4px); }
+            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
+            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-4px); }
+            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.1); }
 
             /* Technologies: Raise Blockchain and Keycloak */
-            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-10px); }
-            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
-            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-10px); }
-            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.05); }
+            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-4px); }
+            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
+            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-4px); }
+            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.1); }
         }
 
         @media (max-width: 768px) {
@@ -679,12 +775,12 @@
             }
 
             .category-node:hover .skills-list {
-                gap: 12px 8px;
+                gap: 5px 4px;
             }
 
             .central-node {
-                width: 150px;
-                height: 150px;
+                width: 128px; /* Reduced by 15% from 150px */
+                height: 128px;
                 top: 53%;
             }
             .central-node h1 {
@@ -707,7 +803,7 @@
             .weight-1 .category-title { font-size: 12px; }
             
             /* Custom sizes at 768px */
-            .category-methodologies {
+            .category-methods {
                 width: 120px !important;
                 height: 120px !important;
             }
@@ -718,8 +814,8 @@
             }
             
             .category-languages {
-                width: 90px !important;
-                height: 90px !important;
+                width: 105px !important; /* Increased from 90px */
+                height: 105px !important;
             }
             
             .category-soft-skills {
@@ -743,8 +839,8 @@
             }
 
             .category-projects {
-                width: 125px !important;
-                height: 125px !important;
+                width: 138px !important; /* Increased by 10% from 125px */
+                height: 138px !important;
             }
 
             /* Reduce gap for specific categories */
@@ -753,7 +849,7 @@
             }
 
             .category-languages:hover .skills-list {
-                gap: 10px 8px;
+                gap: 5px 4px;
             }
 
             .category-education .skills-list {
@@ -761,7 +857,7 @@
             }
 
             .category-education:hover .skills-list {
-                gap: 10px 8px;
+                gap: 5px 4px;
             }
 
             .category-soft-skills .skills-list {
@@ -769,7 +865,7 @@
             }
 
             .category-soft-skills:hover .skills-list {
-                gap: 12px 10px;
+                gap: 5px 4px;
             }
 
             .category-projects .skills-list {
@@ -778,56 +874,65 @@
                 grid-template-columns: 1fr 1fr;
                 justify-items: center;
                 align-items: center;
+                transform: translateX(4px); /* Shift slightly right for better visual centering */
+            }
+
+            /* Center Leiria Market (3rd item) and Argo (6th item) on their own rows */
+            .category-projects .skill-link:nth-child(3),
+            .category-projects .skill-link:nth-child(6) {
+                grid-column: span 2;
             }
 
             /* Remove scattered effect from projects */
             .category-projects .skill-link {
+                font-size: 0.85em !important; /* Reduced for mobile */
+                text-decoration: underline !important;
                 transform: none !important;
             }
 
             .category-projects:hover .skill-link {
-                transform: scale(1.1) !important;
+            transform: scale(1.1) !important;
             }
 
             .category-projects:hover .skills-list {
-                gap: 10px 8px;
+                gap: 5px 4px;
             }
 
             /* Approximate specific skill pairs at 768px */
-            .category-languages .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-languages .skill-tag:nth-child(1) { transform: translateY(-1px); }
             .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
             .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
             .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
-            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
+            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
 
-            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-1px); }
             .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
 
-            .category-education .skill-tag:nth-child(1) { transform: translateY(-2px); }
+            .category-education .skill-tag:nth-child(1) { transform: translateY(-1px); }
             .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-3px) scale(1.05); }
-            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-2px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
+            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
             .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
             .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.05); }
-            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(3px) scale(1.05); }
+            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
+            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
 
             /* Design & Discovery: Raise Drawio and Adobe XD */
-            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-10px); }
-            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
-            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-10px); }
-            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.05); }
+            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-4px); }
+            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
+            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-4px); }
+            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.1); }
 
             /* Technologies: Raise Blockchain and Keycloak */
-            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-10px); }
-            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.05); }
-            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-10px); }
-            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.05); }
+            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-4px); }
+            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
+            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-4px); }
+            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.1); }
             
             .skill-weight-4 {
                 font-size: 9px;
@@ -918,7 +1023,7 @@
         .pdf-download a:hover {
             background: rgba(59, 130, 246, 1);
             box-shadow: 0 6px 30px rgba(96, 165, 250, 0.6);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .pdf-download svg {
@@ -935,7 +1040,7 @@
         .linkedin-link a:hover {
             background: rgba(0, 119, 181, 1);
             box-shadow: 0 6px 30px rgba(10, 102, 194, 0.6);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .linkedin-link svg {
@@ -1094,8 +1199,6 @@
                         {"name": "Stakeholder Alignment", "weight": 3},
                         {"name": "Adaptability", "weight": 3},
                         {"name": "Leadership", "weight": 2},
-                        {"name": "Problem Solving", "weight": 2},
-                        {"name": "Collaboration", "weight": 1},
                         {"name": "Conflict Res.", "weight": 1}
                     ]
                 },
@@ -1105,8 +1208,7 @@
                     "skills": [
                         {"name": "CSPO", "weight": 4},
                         {"name": "Java Progr.", "weight": 3},
-                        {"name": "Civil Eng", "weight": 2},
-                        {"name": "Bridge Design", "weight": 1}
+                        {"name": "Civil Eng", "weight": 2}
                     ]
                 },
                 {
@@ -1116,7 +1218,6 @@
                         {"name": "Vibe Coding", "weight": 4},
                         {"name": "Claude", "weight": 3},
                         {"name": "ChatGPT", "weight": 3},
-                        {"name": "Manus", "weight": 2},
                         {"name": "Gemini", "weight": 2},
                         {"name": "Perplexity", "weight": 2},
                         {"name": "Deepseek", "weight": 1}
@@ -1140,9 +1241,9 @@
                         {"name": "Bhout", "weight": 3, "link": "https://www.bhout.com/"},
                         {"name": "Fluxe", "weight": 3, "link": "https://fluxesoftware.com/en"},
                         {"name": "Leiria Market", "weight": 3, "link": "https://leiriamarket.pt/"},
-                        {"name": "Argo", "weight": 3, "link": "https://theargonautcompany.com/argo/"},
                         {"name": "Boxcore", "weight": 3, "link": "https://www.boxcore.com/"},
-                        {"name": "FIAF", "weight": 3, "link": "https://www.fiafnet.org/"}
+                        {"name": "FIAF", "weight": 3, "link": "https://www.fiafnet.org/"},
+                        {"name": "Argo", "weight": 3, "link": "https://theargonautcompany.com/argo/"}
                     ]
                 }
             ]
@@ -1209,8 +1310,10 @@
             node.className = `category-node weight-${category.weight}`;
             
             // Add custom classes for specific categories
-            if (category.name === "Methods") {
-                node.classList.add('category-methodologies');
+            if (category.name === "Project Management") {
+                node.classList.add('category-project-management');
+            } else if (category.name === "Methods") {
+                node.classList.add('category-methods');
             } else if (category.name === "Education") {
                 node.classList.add('category-education');
             } else if (category.name === "Languages") {
@@ -1232,9 +1335,12 @@
             // Position was already calculated above (x, y variables)
             node.style.left = `${x}px`;
             node.style.top = `${y}px`;
-            node.style.transform = 'translate(-50%, -50%)';
             node.style.animationDelay = `${index * 0.2}s`;
             node.style.setProperty('--scale-factor', scaleFactor);
+            
+            // Store original position for hover animation
+            node.dataset.originalX = x;
+            node.dataset.originalY = y;
             
             // Set z-index based on distance from center (270°)
             // Further from center = higher z-index = overlaps closer categories
@@ -1288,6 +1394,38 @@
             node.appendChild(skillsList);
             container.appendChild(node);
             
+            // Add hover event listeners to move bubble towards center by 1/4 of its radius
+            node.addEventListener('mouseenter', () => {
+                // Get bubble's radius (half of width/height)
+                const rect = node.getBoundingClientRect();
+                const bubbleRadius = rect.width / 2;
+                
+                // Calculate direction to center
+                const origX = parseFloat(node.dataset.originalX);
+                const origY = parseFloat(node.dataset.originalY);
+                const dirX = centerX - origX;
+                const dirY = centerY - origY;
+                const distance = Math.sqrt(dirX * dirX + dirY * dirY);
+                
+                // Move only 1/4 of bubble's radius towards center (reduced to prevent flickering)
+                const moveDistance = bubbleRadius / 4;
+                const moveX = (dirX / distance) * moveDistance;
+                const moveY = (dirY / distance) * moveDistance;
+                
+                node.style.left = `${origX + moveX}px`;
+                node.style.top = `${origY + moveY}px`;
+                node.classList.add('is-centered');
+            });
+            
+            node.addEventListener('mouseleave', () => {
+                // Return to original position
+                const origX = parseFloat(node.dataset.originalX);
+                const origY = parseFloat(node.dataset.originalY);
+                node.style.left = `${origX}px`;
+                node.style.top = `${origY}px`;
+                node.classList.remove('is-centered');
+            });
+            
             // Create connection line to center
             const line = document.createElement('div');
             line.className = 'connection-line';
@@ -1312,20 +1450,6 @@
             container.appendChild(line);
         });
 
-        // Parallax effect
-        document.addEventListener('mousemove', (e) => {
-            const nodes = document.querySelectorAll('.category-node');
-            const x = (e.clientX / window.innerWidth - 0.5) * 15;
-            const y = (e.clientY / window.innerHeight - 0.5) * 15;
-            
-            nodes.forEach((node, index) => {
-                if (!node.matches(':hover')) {
-                    const speed = (index % 3 + 1) * 0.3;
-                    // Always maintain translate(-50%, -50%) for centering
-                    node.style.transform = `translate(calc(-50% + ${x * speed}px), calc(-50% + ${y * speed}px))`;
-                }
-            });
-        });
 
         // Reposition on window resize
         window.addEventListener('resize', () => {
