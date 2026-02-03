@@ -195,52 +195,39 @@
             position: relative;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: center;
+            /* Grid with FIXED 2 columns - prevents reorganization on scale */
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Always 2 equal columns */
+            justify-items: center;
             align-content: center;
-            gap: 8px 6px; /* Normal state - keeps skills closer together */
-            padding: 10px;
-            transition: all 0.6s ease;
+            gap: 9px 8px; /* Increased row gap to 9px for multi-line skills */
+            padding: 14px 12px;
         }
 
         .category-node:hover .skills-list {
-            gap: 5px 4px; /* Balanced spacing on hover - not too tight, not too loose */
+            /* Grid maintains exact same 2-column structure */
+            grid-template-columns: 1fr 1fr; /* Same columns */
+            gap: 9px 8px; /* Same gap */
+            padding: 14px 12px;
         }
 
         .skill-tag {
-            white-space: nowrap;
+            white-space: normal; /* Allow text to wrap to multiple lines */
+            word-wrap: break-word; /* Break long words if needed */
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-align: center;
-            line-height: 1.3;
-            padding: 2px 0;
+            line-height: 1.4; /* Good spacing for multi-line */
+            padding: 3px 4px; /* Vertical and horizontal padding */
+            /* Grid item in fixed column structure */
+            max-width: 100%; /* Prevents overflow */
+            min-height: 16px; /* Minimum height prevents overlap */
+            /* Skills can now span multiple lines - no ellipsis */
         }
 
-        /* Create scattered/dispersed effect like stars in the sky */
-        .skill-tag:nth-child(1) { transform: translateY(-1px); }
-        .skill-tag:nth-child(2) { transform: translateY(2px); }
-        .skill-tag:nth-child(3) { transform: translateY(-1px); }
-        .skill-tag:nth-child(4) { transform: translateY(1px); }
-        .skill-tag:nth-child(5) { transform: translateY(-1px); }
-        .skill-tag:nth-child(6) { transform: translateY(2px); }
-        .skill-tag:nth-child(7) { transform: translateY(-1px); }
-        .skill-tag:nth-child(8) { transform: translateY(1px); }
-        .skill-tag:nth-child(9) { transform: translateY(-1px); }
-        .skill-tag:nth-child(10) { transform: translateY(1px); }
-        .skill-tag:nth-child(11) { transform: translateY(-1px); }
-
-        .category-node:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(2) { transform: translateY(2px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(3) { transform: translateY(-1px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(4) { transform: translateY(2px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(5) { transform: translateY(-4px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(6) { transform: translateY(1px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(7) { transform: translateY(-4px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(8) { transform: translateY(2px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(9) { transform: translateY(-1px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(10) { transform: translateY(4px) scale(1.1); }
-        .category-node:hover .skill-tag:nth-child(11) { transform: translateY(-1px) scale(1.1); }
+        /* Skills now align in organized rows - no vertical scatter */
+        .category-node:hover .skill-tag {
+            transform: scale(1.1);
+        }
 
         /* Skill weight - size and color variations */
         /* DEFAULT COLORS (para categorias sem todos os weights) */
@@ -304,7 +291,7 @@
         .category-design-discovery .skill-weight-2 { color: #6ee7b7 !important; } /* Lighter Emerald */
         .category-design-discovery .skill-weight-1 { color: #a7f3d0 !important; opacity: 1 !important; } /* Very Light Emerald */
 
-        /* ===== CONJUNTO 4: ROXOS (Dev Tools) ===== */
+        /* ===== CONJUNTO 4: ROXOS (Development) ===== */
         .category-development-tools .skill-weight-4 { color: #8b5cf6 !important; } /* Violet */
         .category-development-tools .skill-weight-3 { color: #a78bfa !important; } /* Light Violet */
         .category-development-tools .skill-weight-2 { color: #c4b5fd !important; } /* Lighter Violet */
@@ -343,12 +330,65 @@
         /* ===== PROJECTS: TODOS COM MESMA COR (Ciano) ===== */
         .category-projects .skill-link { color: #7dd3fc !important; } /* All same cyan color */
 
-        /* Weight-based sizes for categories - RESPONSIVE */
+        /* Sizes based on content (number of skills) instead of weight */
         .category-node {
             --scale-factor: 1; /* Default, overridden by JS */
         }
 
-        /* Weight 5 - MAIOR */
+        /* EXTRA LARGE - 9-11 skills */
+        .category-project-management {
+            width: calc(260px * var(--scale-factor)) !important; /* 9 skills */
+            height: calc(260px * var(--scale-factor)) !important;
+        }
+        .category-development-tools {
+            width: calc(270px * var(--scale-factor)) !important; /* 11 skills - most skills */
+            height: calc(270px * var(--scale-factor)) !important;
+        }
+
+        /* LARGE - 6-7 skills */
+        .category-technologies {
+            width: calc(240px * var(--scale-factor)) !important; /* 7 skills (Tech Stack) */
+            height: calc(240px * var(--scale-factor)) !important;
+        }
+        .category-soft-skills {
+            width: calc(230px * var(--scale-factor)) !important; /* 6 skills */
+            height: calc(230px * var(--scale-factor)) !important;
+        }
+        .category-ai {
+            width: calc(240px * var(--scale-factor)) !important; /* 7 skills */
+            height: calc(240px * var(--scale-factor)) !important;
+        }
+        .category-projects {
+            width: calc(230px * var(--scale-factor)) !important; /* 6 skills */
+            height: calc(230px * var(--scale-factor)) !important;
+        }
+
+        /* MEDIUM - 5 skills */
+        .category-design-discovery {
+            width: calc(210px * var(--scale-factor)) !important; /* 5 skills */
+            height: calc(210px * var(--scale-factor)) !important;
+        }
+
+        /* SMALL - 3-4 skills */
+        .category-methods {
+            width: calc(175px * var(--scale-factor)) !important; /* 4 skills */
+            height: calc(175px * var(--scale-factor)) !important;
+        }
+        .category-education {
+            width: calc(165px * var(--scale-factor)) !important; /* 3 skills */
+            height: calc(165px * var(--scale-factor)) !important;
+        }
+        .category-languages {
+            width: calc(175px * var(--scale-factor)) !important; /* 4 skills */
+            height: calc(175px * var(--scale-factor)) !important;
+        }
+
+        /* All category titles same size */
+        .category-title {
+            font-size: clamp(20px, calc(28px * var(--scale-factor)), 28px) !important;
+        }
+
+        /* OLD WEIGHT-BASED AND UNIFORM SIZES - COMMENTED OUT
         .weight-5 {
             width: calc(280px * var(--scale-factor));
             height: calc(280px * var(--scale-factor));
@@ -357,7 +397,6 @@
             font-size: clamp(28px, calc(42px * var(--scale-factor)), 42px);
         }
 
-        /* Weight 4 */
         .weight-4 {
             width: calc(250px * var(--scale-factor));
             height: calc(250px * var(--scale-factor));
@@ -366,7 +405,6 @@
             font-size: clamp(24px, calc(36px * var(--scale-factor)), 36px);
         }
 
-        /* Weight 3 */
         .weight-3 {
             width: calc(220px * var(--scale-factor));
             height: calc(220px * var(--scale-factor));
@@ -375,7 +413,6 @@
             font-size: clamp(20px, calc(28px * var(--scale-factor)), 28px);
         }
 
-        /* Weight 2 */
         .weight-2 {
             width: calc(195px * var(--scale-factor));
             height: calc(195px * var(--scale-factor));
@@ -384,7 +421,6 @@
             font-size: clamp(16px, calc(22px * var(--scale-factor)), 22px);
         }
 
-        /* Weight 1 - MENOR */
         .weight-1 {
             width: calc(175px * var(--scale-factor));
             height: calc(175px * var(--scale-factor));
@@ -392,37 +428,8 @@
         .weight-1 .category-title {
             font-size: clamp(14px, calc(18px * var(--scale-factor)), 18px);
         }
+        */
 
-        /* Custom size adjustments for specific categories */
-        .category-methods {
-            width: calc(200px * var(--scale-factor)) !important;
-            height: calc(200px * var(--scale-factor)) !important;
-        }
-
-        .category-education {
-            width: calc(165px * var(--scale-factor)) !important;
-            height: calc(165px * var(--scale-factor)) !important;
-        }
-
-        .category-languages {
-            width: calc(170px * var(--scale-factor)) !important; /* Increased from 150px */
-            height: calc(170px * var(--scale-factor)) !important;
-        }
-
-        .category-soft-skills {
-            width: calc(250px * var(--scale-factor)) !important;
-            height: calc(250px * var(--scale-factor)) !important;
-        }
-
-        .category-development-tools {
-            width: calc(260px * var(--scale-factor)) !important;
-            height: calc(260px * var(--scale-factor)) !important;
-        }
-
-        .category-technologies {
-            width: calc(210px * var(--scale-factor)) !important;
-            height: calc(210px * var(--scale-factor)) !important;
-        }
 
         .category-ai {
             width: calc(205px * var(--scale-factor)) !important;
@@ -445,12 +452,12 @@
         }
 
         .category-projects .skills-list {
-            gap: 10px 8px;
+            gap: 9px 8px; /* Match updated base gap for multi-line */
             display: grid !important;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr; /* Fixed 2-column layout */
             justify-items: center;
             align-items: center;
-            width: 100%; /* Ensure grid takes full width for proper centering */
+            width: 100%;
             transform: translateX(4px); /* Shift slightly right for better visual centering */
             }
 
@@ -465,29 +472,8 @@
         .category-projects .skill-link:nth-child(6) {
             grid-column: span 2; /* Take full width */
         }
-        .category-languages .skills-list {
-            gap: 10px 8px;
-        }
-
-        .category-languages:hover .skills-list {
-            gap: 5px 4px;
-        }
-
-        .category-education .skills-list {
-            gap: 10px 8px;
-        }
-
-        .category-education:hover .skills-list {
-            gap: 5px 4px;
-        }
-
-        .category-soft-skills .skills-list {
-            gap: 8px 6px;
-        }
-
-        .category-soft-skills:hover .skills-list {
-            gap: 5px 4px;
-        }
+        /* All categories use the same gap for consistency */
+        /* Removed category-specific gap overrides */
 
         /* Projects links styling */
         .category-projects .skill-link {
@@ -503,7 +489,8 @@
         }
 
         .category-projects:hover .skills-list {
-            gap: 5px 4px;
+            /* Maintains same grid structure and gap */
+            gap: 9px 8px;
         }
 
         .category-projects .skill-link:hover {
@@ -511,48 +498,60 @@
             text-decoration: underline !important; /* Keep underline on hover */
         }
 
-        /* Approximate specific skill pairs */
-        /* Languages: English closer to Portuguese */
-        .category-languages .skill-tag:nth-child(1) { transform: translateY(-1px); }
-        .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
-        .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-        .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
-        
-        /* Languages: Spanish closer to French */
-        .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
-        .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
-        .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
-        .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
+        /* Skills now aligned in organized rows using CSS Grid */
 
-        /* Soft Skills: Team Mgmt closer to Communication */
-        .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-1px); }
-        .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
-        .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-        .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
+        /* Category-specific column layouts */
+        /* Categories with many skills (9-11) use 3 columns */
+        .category-project-management .skills-list,
+        .category-development-tools .skills-list {
+            grid-template-columns: 1fr 1fr 1fr; /* 3 columns for 9-11 skills */
+            gap: 8px 7px; /* Increased row gap for multi-line skills */
+        }
+        .category-project-management:hover .skills-list,
+        .category-development-tools:hover .skills-list {
+            grid-template-columns: 1fr 1fr 1fr; /* Maintains 3 columns */
+            gap: 8px 7px;
+        }
 
-        /* Education: CSPO closer to Java Progr. */
-        .category-education .skill-tag:nth-child(1) { transform: translateY(-1px); }
-        .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
-        .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-        .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
+        /* Categories with medium skills (6-7) can use 2 or 3 columns */
+        .category-technologies .skills-list,
+        .category-ai .skills-list {
+            grid-template-columns: 1fr 1fr 1fr; /* 3 columns for better fit */
+            gap: 8px 7px;
+        }
+        .category-technologies:hover .skills-list,
+        .category-ai:hover .skills-list {
+            grid-template-columns: 1fr 1fr 1fr; /* Maintains 3 columns */
+            gap: 8px 7px;
+        }
 
-        /* Education: Civil Eng closer to Bridge Design */
-        .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
-        .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
-        .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
-        .category-education:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
+        /* Soft Skills has long skill names - keep 2 columns */
+        .category-soft-skills .skills-list {
+            grid-template-columns: 1fr 1fr; /* 2 columns - skills are long */
+            gap: 10px 12px; /* Larger gap for long multi-line text */
+            padding: 12px 10px;
+        }
+        .category-soft-skills:hover .skills-list {
+            grid-template-columns: 1fr 1fr; /* Maintains 2 columns */
+            gap: 10px 12px; /* Same gap */
+            padding: 12px 10px;
+        }
 
-        /* Design & Discovery: Raise Drawio and Adobe XD */
-        .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-4px); }
-        .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
-        .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-4px); }
-        .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.1); }
-
-        /* Technologies: Raise Blockchain and Keycloak */
-        .category-technologies .skill-tag:nth-child(2) { transform: translateY(-4px); }
-        .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
-        .category-technologies .skill-tag:nth-child(4) { transform: translateY(-4px); }
-        .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.1); }
+        /* Small categories (3-4 skills) use 2 columns */
+        .category-methods .skills-list,
+        .category-education .skills-list,
+        .category-languages .skills-list,
+        .category-design-discovery .skills-list {
+            grid-template-columns: 1fr 1fr; /* 2 columns */
+            gap: 9px 8px;
+        }
+        .category-methods:hover .skills-list,
+        .category-education:hover .skills-list,
+        .category-languages:hover .skills-list,
+        .category-design-discovery:hover .skills-list {
+            grid-template-columns: 1fr 1fr; /* Maintains 2 columns */
+            gap: 9px 8px;
+        }
 
         /* Connecting lines */
         .connection-line {
@@ -606,13 +605,10 @@
 
         /* Responsive */
         @media (max-width: 1200px) {
-            .skills-list {
-                gap: 10px 8px;
-                padding: 8px;
-            }
+            /* Skills-list uses base gap and padding for consistency */
 
             .category-node:hover .skills-list {
-                gap: 5px 4px;
+                /* Gap stays the same to maintain relative positions */
             }
             
             .central-node {
@@ -624,6 +620,62 @@
                 font-size: 40px;
             }
             
+            /* Sizes based on content at tablet (1200px) */
+            
+            /* EXTRA LARGE - 9-11 skills */
+            .category-project-management {
+                width: 220px !important;
+                height: 220px !important;
+            }
+            .category-development-tools {
+                width: 230px !important;
+                height: 230px !important;
+            }
+
+            /* LARGE - 6-7 skills */
+            .category-technologies {
+                width: 200px !important;
+                height: 200px !important;
+            }
+            .category-soft-skills {
+                width: 195px !important;
+                height: 195px !important;
+            }
+            .category-ai {
+                width: 200px !important;
+                height: 200px !important;
+            }
+            .category-projects {
+                width: 195px !important;
+                height: 195px !important;
+            }
+
+            /* MEDIUM - 5 skills */
+            .category-design-discovery {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            /* SMALL - 3-4 skills */
+            .category-methods {
+                width: 150px !important;
+                height: 150px !important;
+            }
+            .category-education {
+                width: 140px !important;
+                height: 140px !important;
+            }
+            .category-languages {
+                width: 150px !important;
+                height: 150px !important;
+            }
+
+            /* All category titles same size */
+            .category-title {
+                font-size: 24px !important;
+            }
+
+            /* OLD UNIFORM AND CUSTOM SIZES - COMMENTED OUT
             .weight-5 { width: 240px; height: 240px; }
             .weight-5 .category-title { font-size: 36px; }
             .weight-4 { width: 215px; height: 215px; }
@@ -634,79 +686,17 @@
             .weight-2 .category-title { font-size: 20px; }
             .weight-1 { width: 150px; height: 150px; }
             .weight-1 .category-title { font-size: 16px; }
+            */
             
-            /* Custom sizes at 1200px */
-            .category-methods {
-                width: 175px !important;
-                height: 175px !important;
-            }
-            
-            .category-education {
-                width: 145px !important;
-                height: 145px !important;
-            }
-            
-            .category-languages {
-                width: 145px !important; /* Increased from 130px */
-                height: 145px !important;
-            }
-            
-            .category-soft-skills {
-                width: 215px !important;
-                height: 215px !important;
-            }
 
-            .category-development-tools {
-                width: 225px !important;
-                height: 225px !important;
-            }
-
-            .category-technologies {
-                width: 180px !important;
-                height: 180px !important;
-            }
-
-            .category-ai {
-                width: 180px !important;
-                height: 180px !important;
-            }
-
-            .category-projects {
-                width: 209px !important; /* Increased by 10% from 190px */
-                height: 209px !important;
-            }
-
-            /* Reduce gap for specific categories */
-            .category-languages .skills-list {
-                gap: 8px 6px;
-            }
-
-            .category-languages:hover .skills-list {
-                gap: 5px 4px;
-            }
-
-            .category-education .skills-list {
-                gap: 8px 6px;
-            }
-
-            .category-education:hover .skills-list {
-                gap: 5px 4px;
-            }
-
-            .category-soft-skills .skills-list {
-                gap: 10px 8px;
-            }
-
-            .category-soft-skills:hover .skills-list {
-                gap: 5px 4px;
-            }
+            /* All categories use base gap - removed specific overrides */
 
             .category-projects .skills-list {
-                gap: 8px 6px;
                 display: grid !important;
                 grid-template-columns: 1fr 1fr;
                 justify-items: center;
                 align-items: center;
+                gap: 8px 7px; /* Consistent gap for tablet with multi-line */
                 transform: translateX(4px); /* Shift slightly right for better visual centering */
             }
 
@@ -728,54 +718,52 @@
             }
 
             .category-projects:hover .skills-list {
-                gap: 5px 4px;
+                /* Maintains same gap */
+                gap: 8px 7px;
             }
 
-            /* Approximate specific skill pairs at 1200px */
-            .category-languages .skill-tag:nth-child(1) { transform: translateY(-1px); }
-            .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
-            .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
-            .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
-            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
-
-            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-1px); }
-            .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
-
-            .category-education .skill-tag:nth-child(1) { transform: translateY(-1px); }
-            .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
-            .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
-            .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
-            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
-
-            /* Design & Discovery: Raise Drawio and Adobe XD */
-            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-4px); }
-            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
-            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-4px); }
-            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.1); }
-
-            /* Technologies: Raise Blockchain and Keycloak */
-            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-4px); }
-            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
-            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-4px); }
-            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.1); }
+            /* Skills aligned using CSS Grid - no manual offsets needed */
         }
 
         @media (max-width: 768px) {
             .skills-list {
-                gap: 10px 6px;
-                padding: 6px;
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* Default 2 columns for mobile */
+                gap: 6px 6px; /* Slightly increased for multi-line on mobile */
+                padding: 10px 8px;
             }
 
             .category-node:hover .skills-list {
-                gap: 5px 4px;
+                /* Grid maintains exact same structure */
+                grid-template-columns: 1fr 1fr; /* Same 2 columns */
+                gap: 6px 6px; /* Same gap */
+                padding: 10px 8px;
+            }
+
+            /* All categories use 2 columns on mobile for better fit */
+            .category-project-management .skills-list,
+            .category-development-tools .skills-list,
+            .category-technologies .skills-list,
+            .category-ai .skills-list {
+                grid-template-columns: 1fr 1fr; /* 2 columns on mobile */
+                gap: 6px 6px;
+            }
+            .category-project-management:hover .skills-list,
+            .category-development-tools:hover .skills-list,
+            .category-technologies:hover .skills-list,
+            .category-ai:hover .skills-list {
+                grid-template-columns: 1fr 1fr; /* Maintains 2 columns */
+                gap: 6px 6px;
+            }
+
+            /* Soft Skills - slightly larger gap on mobile */
+            .category-soft-skills .skills-list {
+                gap: 8px 8px; /* Increased for multi-line long text */
+                padding: 10px 8px;
+            }
+            .category-soft-skills:hover .skills-list {
+                gap: 8px 8px;
+                padding: 10px 8px;
             }
 
             .central-node {
@@ -791,6 +779,72 @@
                 font-size: 8px;
             }
 
+            /* Sizes based on content at mobile (768px) */
+            
+            /* EXTRA LARGE - 9-11 skills */
+            .category-project-management {
+                width: 145px !important;
+                height: 145px !important;
+                padding: 10px;
+            }
+            .category-development-tools {
+                width: 150px !important;
+                height: 150px !important;
+                padding: 10px;
+            }
+
+            /* LARGE - 6-7 skills */
+            .category-technologies {
+                width: 135px !important;
+                height: 135px !important;
+                padding: 10px;
+            }
+            .category-soft-skills {
+                width: 130px !important;
+                height: 130px !important;
+                padding: 10px;
+            }
+            .category-ai {
+                width: 135px !important;
+                height: 135px !important;
+                padding: 10px;
+            }
+            .category-projects {
+                width: 130px !important;
+                height: 130px !important;
+                padding: 10px;
+            }
+
+            /* MEDIUM - 5 skills */
+            .category-design-discovery {
+                width: 120px !important;
+                height: 120px !important;
+                padding: 10px;
+            }
+
+            /* SMALL - 3-4 skills */
+            .category-methods {
+                width: 105px !important;
+                height: 105px !important;
+                padding: 8px;
+            }
+            .category-education {
+                width: 100px !important;
+                height: 100px !important;
+                padding: 8px;
+            }
+            .category-languages {
+                width: 105px !important;
+                height: 105px !important;
+                padding: 8px;
+            }
+
+            /* All category titles same size */
+            .category-title {
+                font-size: 16px !important;
+            }
+
+            /* OLD UNIFORM AND CUSTOM SIZES - COMMENTED OUT
             .weight-5 { width: 150px; height: 150px; padding: 16px; }
             .weight-5 .category-title { font-size: 22px; }
             .weight-4 { width: 135px; height: 135px; padding: 14px; }
@@ -801,79 +855,18 @@
             .weight-2 .category-title { font-size: 14px; }
             .weight-1 { width: 100px; height: 100px; padding: 8px; }
             .weight-1 .category-title { font-size: 12px; }
+            */
             
-            /* Custom sizes at 768px */
-            .category-methods {
-                width: 120px !important;
-                height: 120px !important;
-            }
-            
-            .category-education {
-                width: 100px !important;
-                height: 100px !important;
-            }
-            
-            .category-languages {
-                width: 105px !important; /* Increased from 90px */
-                height: 105px !important;
-            }
-            
-            .category-soft-skills {
-                width: 140px !important;
-                height: 140px !important;
-            }
-
-            .category-development-tools {
-                width: 145px !important;
-                height: 145px !important;
-            }
-
-            .category-technologies {
-                width: 120px !important;
-                height: 120px !important;
-            }
-
-            .category-ai {
-                width: 115px !important;
-                height: 115px !important;
-            }
-
-            .category-projects {
-                width: 138px !important; /* Increased by 10% from 125px */
-                height: 138px !important;
-            }
 
             /* Reduce gap for specific categories */
-            .category-languages .skills-list {
-                gap: 8px 6px;
-            }
-
-            .category-languages:hover .skills-list {
-                gap: 5px 4px;
-            }
-
-            .category-education .skills-list {
-                gap: 8px 6px;
-            }
-
-            .category-education:hover .skills-list {
-                gap: 5px 4px;
-            }
-
-            .category-soft-skills .skills-list {
-                gap: 10px 8px;
-            }
-
-            .category-soft-skills:hover .skills-list {
-                gap: 5px 4px;
-            }
+            /* All categories use base gap - removed specific overrides */
 
             .category-projects .skills-list {
-                gap: 8px 6px;
                 display: grid !important;
                 grid-template-columns: 1fr 1fr;
                 justify-items: center;
                 align-items: center;
+                gap: 6px 6px; /* Consistent gap for mobile with multi-line */
                 transform: translateX(4px); /* Shift slightly right for better visual centering */
             }
 
@@ -895,44 +888,12 @@
             }
 
             .category-projects:hover .skills-list {
-                gap: 5px 4px;
+                /* Maintains same gap */
+                gap: 6px 6px;
+            }
             }
 
-            /* Approximate specific skill pairs at 768px */
-            .category-languages .skill-tag:nth-child(1) { transform: translateY(-1px); }
-            .category-languages .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-languages:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-            .category-languages:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
-            .category-languages .skill-tag:nth-child(3) { transform: translateY(1px); }
-            .category-languages .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-languages:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
-            .category-languages:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
-
-            .category-soft-skills .skill-tag:nth-child(1) { transform: translateY(-1px); }
-            .category-soft-skills .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-soft-skills:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-            .category-soft-skills:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
-
-            .category-education .skill-tag:nth-child(1) { transform: translateY(-1px); }
-            .category-education .skill-tag:nth-child(2) { transform: translateY(-1px); }
-            .category-education:hover .skill-tag:nth-child(1) { transform: translateY(-1px) scale(1.1); }
-            .category-education:hover .skill-tag:nth-child(2) { transform: translateY(-1px) scale(1.1); }
-            .category-education .skill-tag:nth-child(3) { transform: translateY(1px); }
-            .category-education .skill-tag:nth-child(4) { transform: translateY(2px); }
-            .category-education:hover .skill-tag:nth-child(3) { transform: translateY(2px) scale(1.1); }
-            .category-education:hover .skill-tag:nth-child(4) { transform: translateY(1px) scale(1.1); }
-
-            /* Design & Discovery: Raise Drawio and Adobe XD */
-            .category-design-discovery .skill-tag:nth-child(2) { transform: translateY(-4px); }
-            .category-design-discovery:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
-            .category-design-discovery .skill-tag:nth-child(5) { transform: translateY(-4px); }
-            .category-design-discovery:hover .skill-tag:nth-child(5) { transform: translateY(-12px) scale(1.1); }
-
-            /* Technologies: Raise Blockchain and Keycloak */
-            .category-technologies .skill-tag:nth-child(2) { transform: translateY(-4px); }
-            .category-technologies:hover .skill-tag:nth-child(2) { transform: translateY(-12px) scale(1.1); }
-            .category-technologies .skill-tag:nth-child(4) { transform: translateY(-4px); }
-            .category-technologies:hover .skill-tag:nth-child(4) { transform: translateY(-12px) scale(1.1); }
+            /* Skills aligned using CSS Grid - no manual offsets needed */
             
             .skill-weight-4 {
                 font-size: 9px;
@@ -1162,10 +1123,9 @@
                     ]
                 },
                 {
-                    "name": "Dev Tools",
+                    "name": "Development",
                     "weight": 3,
                     "skills": [
-                        {"name": "Cursor", "weight": 4},
                         {"name": "Java", "weight": 4},
                         {"name": "JS/TS", "weight": 3},
                         {"name": "React", "weight": 3},
@@ -1175,19 +1135,21 @@
                         {"name": "Git", "weight": 2},
                         {"name": "Docker", "weight": 1},
                         {"name": "Postman", "weight": 1},
-                        {"name": "IntelliJ", "weight": 1}
+                        {"name": "IntelliJ", "weight": 1},
+                        {"name": "OAuth", "weight": 1}
                     ]
                 },
                 {
                     "name": "Tech Stack",
                     "weight": 3,
                     "skills": [
-                        {"name": "Webapps", "weight": 4},
+                        {"name": "Web Apps", "weight": 4},
+                        {"name": "Mobile Apps", "weight": 4},
                         {"name": "SaaS", "weight": 4},
+                        {"name": "Specialized Apps", "weight": 3},
                         {"name": "AI & ML", "weight": 3},
                         {"name": "Blockchain", "weight": 3},
-                        {"name": "IoT", "weight": 2},
-                        {"name": "OAuth", "weight": 1}
+                        {"name": "IoT", "weight": 2}
                     ]
                 },
                 {
@@ -1215,6 +1177,7 @@
                     "name": "AI",
                     "weight": 2,
                     "skills": [
+                        {"name": "Cursor", "weight": 4},
                         {"name": "Vibe Coding", "weight": 4},
                         {"name": "Claude", "weight": 3},
                         {"name": "ChatGPT", "weight": 3},
@@ -1228,8 +1191,8 @@
                     "weight": 1,
                     "skills": [
                         {"name": "English", "weight": 4},
-                        {"name": "Portuguese", "weight": 3},
-                        {"name": "Spanish", "weight": 2},
+                        {"name": "Portuguese", "weight": 4},
+                        {"name": "Spanish", "weight": 3},
                         {"name": "French", "weight": 2}
                     ]
                 },
@@ -1252,7 +1215,7 @@
         // Semi-circle layout: wider spacing (30°) for more separation
         const categoryPositions = [
             { category: "Education", weight: 2, angle: 150 },                   // left
-            { category: "Dev Tools", weight: 3, angle: 180 },                   // left-upper
+            { category: "Development", weight: 3, angle: 180 },                   // left-upper
             { category: "Design & Discovery", weight: 3, angle: 210 },          // upper-left
             { category: "Tech Stack", weight: 3, angle: 240 },                  // upper-left-center
             { category: "Project Management", weight: 5, angle: 270 },          // TOP CENTER
@@ -1320,7 +1283,7 @@
                 node.classList.add('category-languages');
             } else if (category.name === "Soft Skills") {
                 node.classList.add('category-soft-skills');
-            } else if (category.name === "Dev Tools") {
+            } else if (category.name === "Development") {
                 node.classList.add('category-development-tools');
             } else if (category.name === "Tech Stack") {
                 node.classList.add('category-technologies');
